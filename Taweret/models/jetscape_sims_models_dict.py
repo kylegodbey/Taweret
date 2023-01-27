@@ -32,18 +32,6 @@ sys.path.append("/Users/dananjayaliyanage/git/Taweret/subpackages/js-sims-bayes/
 from configurations import *
 from emulator import *
 
-def dic_map_obs_to_columns(obs_to_remove=None):
-    it = 0 
-    dic = {}
-    for k in obs_cent_list['Pb-Pb-2760']:
-        if obs_to_remove is not None:
-            if k in obs_to_remove:
-                continue
-        val= obs_cent_list['Pb-Pb-2760'][k]
-        dic[k]=[it,it+len(val)]
-        it+=len(val)
-    return dic
-
 
 def map_x_to_cent_bins(x : float, obs_to_remove=None):
     """
@@ -103,17 +91,16 @@ class jetscape_models_pb_pb_2760(BaseModel):
         with open(f'{workdir}/emulator/emulator-Pb-Pb-2760-idf-{model_num}.dill',"rb") as f:
             self.Emulators=dill.load(f)
         self.evaluated_MAP = self.Emulators.predict(np.array(MAP_params['Pb-Pb-2760'][self.model_name]).reshape(1,-1), return_cov=True)
-        centr_arr = []
+        centr_dic = {}
         #print(obs_cent_list['Pb-Pb-2760'])
         for k in obs_cent_list['Pb-Pb-2760']:
-            if obs_to_remove is not None:
-                if k in obs_to_remove:
-                    continue
+            x_cent = []
             val= obs_cent_list['Pb-Pb-2760'][k]
             for i_v, v in enumerate(val):
                 lb, ub = v
-                centr_arr.append((lb+ub)/2)
-        self.centr_arr = np.array(centr_arr).flatten()
+                x_cent.append((lb+ub)/2)
+            centr_dic[k]=np.array(x_cent).flatten()
+        self.centr_dic = centr_dic
     # @lru_cache(maxsize=None)
     # def MAP_eval(self, fix_MAP=True):
     #     "Internal use only to Cache the MAP evaluvation values of emulators"
@@ -128,10 +115,8 @@ class jetscape_models_pb_pb_2760(BaseModel):
         Parameters
         ----------
         input_values : numpy 1darray
-            input parameter values. 
+            input parameter values.
             centrality, a number betwen 0 (most central) and 100 (perephiral). 
-            This is fixed for JETSCAPE models because of the constraints on the 
-            experimental centralities. (we only meaure specefic ones)
         model_param : numpy 1darray
             value of the model parameter
         """
@@ -149,26 +134,51 @@ class jetscape_models_pb_pb_2760(BaseModel):
         else:
             mn, cov = self.Emulators.predict(model_param.reshape(1,-1), return_cov=True)
 
-        if len(input_values) != len(self.centr_arr) or not (input_values==self.centr_arr).all():
-            raise Exception( f'input values centralities re outside the fixed centralities that emulators can predict')
-        
-        obs=[]
-        #ignore cross variances for now.
-        obs_var = []
-        for k in obs_cent_list['Pb-Pb-2760']:
-            if self.obs_to_remove is not None:
-                if k in self.obs_to_remove:
-                    continue
-            obs.extend(mn[k][0])
-            #print(mn[k].shape)
-            obs_var.extend((np.diagonal(cov[(k),(k)])))
+        if type(input_values) is dict:
+            mean_dic = {}
+            sd_dic = {}
+            for k in input_values:
+                obs = []
+                obs_var = []
+                if self.obs_to_remove is not None:
+                    if k in self.obs_to_remove:
+                        continue
+                val= input_values[k]
+                for v in val:
+                    if v in self.centr_dic[k]:
+                        i_val = np.argwhere(self.centr_dic[k]==v)
+                        obs.append(mn[k][0][i_val])
+                        obs_var.append((np.diagonal(cov[(k),(k)])[i_val])[0])
+                    else:
+                        raise Exception(f'For {k} The centraility {v} is not avilable in experimental data')
+                mean_dic[k]=np.array(obs).flatten()
+                sd_dic[k]=np.sqrt(obs_var).flatten()
+            return input_values, mean_dic, sd_dic
 
-        return np.array(obs).flatten(), np.sqrt(obs_var).flatten()
+        elif type(input_values) is np.ndarray:
+        
+            x = input_values.flatten()
+            mean = []
+            var = []
+            for xx in x:
+                centr = map_x_to_cent_bins(xx, self.obs_to_remove)
+                obs=[]
+                #ignore cross variances for now.
+                obs_var = []
+                for k in centr:
+                    cen_i = centr[k]
+                    obs.append(mn[k][0][cen_i])
+                    #print(mn[k].shape)
+                    obs_var.append((np.diagonal(cov[(k),(k)])[cen_i])[0])
+                mean.append(obs)
+                var.append(obs_var)
+
+            return np.array(mean), np.sqrt(var)
 
     #rewrite the log_likelihood_elementwise to take the experimental data types into account.
     #We are going to discard some observables because we do not have experimental measurments for them.
     
-    def log_likelihood_elementwise(self, x_exp, y_exp_all, y_err_all, model_param=None):
+    def log_likelihood_elementwise(self, x_exp, y_exp, y_err, model_param=None):
         """
         Calculate Normal log likelihood elementwise for each centrality in x_exp.
 
@@ -184,24 +194,53 @@ class jetscape_models_pb_pb_2760(BaseModel):
 
         """
 
-        predictions, model_errs = self.evaluate(x_exp)
-        diff = []
-        x_exp = x_exp.flatten()
+        if type(x_exp) is dict:
+            input_dict, mn_dict, sd_dict = self.evaluate(x_exp, model_param)
+            predictions = []
+            model_errs = []
+            x_exp_all = []
+            y_exp_all = []
+            y_err_all = []
+
+            for k in x_exp:
+                x_exp_all.append(input_dict[k])
+                predictions.append(mn_dict[k])
+                model_errs.append(sd_dict[k])
+                y_exp_all.append(y_exp[k])
+                y_err_all.append(y_err[k])
+            x_exp_all = np.array(x_exp_all).flatten()
+            predictions = np.array(predictions).flatten()
+            model_errs = np.array(model_errs).flatten()
+            y_exp_all = np.array(y_exp_all).flatten()
+            y_err_all = np.array(y_err_all).flatten()
+
+
+        else:
+
+            predictions, model_errs = self.evaluate(x_exp, model_param)
+            x_exp_all = x_exp.flatten()
+            y_exp_all = y_exp.flatten()
+            y_err_all = y_err.flatten()
+            predictions = predictions.flatten()
+            model_errs = model_errs.flatten()
+    
+
         if len(x_exp)!=y_exp_all.shape[0]:
             raise Exception(f'Dimensionality mistmach between x_exp and y_exp')
-        #print(predictions.shape)
-        #print(model_errs.shape)
-        for i in range(0,len(x_exp)):
-            y_exp = y_exp_all[i]
-            y_err = y_err_all[i]
-            prediction = predictions[i]
-            model_err = model_errs[i]
+        if len(x_exp)!=y_err_all.shape[0]:
+            raise Exception(f'Dimensionality mistmach between x_exp and y_exp')
+        # for i in range(0,len(x_exp)):
+        #     y_exp_i = y_exp_all[i]
+        #     y_err_i = y_err_all[i]
+        #     prediction_i = predictions[i]
+        #     model_err_i = model_errs[i]
 
-            sigma = np.sqrt(np.square(y_err) + np.square(model_err))
-            diff_ar = -0.5* np.square((prediction.flatten() - y_exp)/ sigma) \
-                - 0.5 * np.log(2*np.pi)- np.log(sigma)
-            diff.append(np.sum(diff_ar))
-        return np.array(diff)
+        sigma = np.sqrt(np.square(y_err_all) + np.square(model_errs))
+        diff = -0.5* np.square((predictions - y_exp_all)/ sigma) \
+            - 0.5 * np.log(2*np.pi)- np.log(sigma)
+        #diff.append(np.sum(diff_ar))
+        return np.array(diff).flatten()
+        #return log_likelihood_elementwise_utils(self, x_exp, y_exp, y_err, model_param)
     
     def set_prior(self, bilby_priors=None):
         '''
@@ -250,19 +289,29 @@ class exp_data(BaseModel):
         input_values : numpy 1darray or dictionary
             centrality (x) values
         """
-        if input_values is None:
-            obs = []
-            obs_sd = []
-            cent_ar = []
+
+        #If input_values is a dictionary, then need to do things differently. 
+        if type(input_values) is dict:
+            mean_dic = {}
+            sd_dic = {}
             cent, mn ,sd = self.get()
-            for k in cent:
+            for k in input_values:
+                obs = []
+                obs_sd = []
                 if obs_to_remove is not None:
                     if k in obs_to_remove:
                         continue
-                obs.extend(mn[k])
-                obs_sd.extend(sd[k])
-                cent_ar.extend(cent[k])
-            return np.array(cent_ar).flatten(), np.array(obs).flatten(), np.array(obs_sd).flatten(), dic_map_obs_to_columns(obs_to_remove=obs_to_remove)
+                val= input_values[k]
+                for v in val:
+                    if v in cent[k]:
+                        i_val = np.argwhere(cent[k]==v)
+                        obs.append(mn[k][i_val])
+                        obs_sd.append(sd[k][i_val])
+                    else:
+                        raise Exception(f'For {k} The centraility {v} is not avilable in experimental data')
+                mean_dic[k]=np.array(obs).flatten()
+                sd_dic[k]=np.array(obs_sd).flatten()
+            return input_values, mean_dic, sd_dic
 
         elif type(input_values) is np.ndarray:
             mean = []
