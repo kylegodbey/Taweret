@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; Taweret 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Taweret" href="modules.html" />
+    <link rel="prev" title="Taweret for Bayesian Model Mixing" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Taweret
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About Taweret:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Taweret for Bayesian Model Mixing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#additional-requirements">Additional Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bayesian-trees"><strong>Bayesian Trees</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Taweret</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Linear_BMM_with_cdf_function_for_coleman_models.html">Linear Bivariate BMM with calibration of Coleman toy models.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/coleman_models_BMM_comparative_study.html">Comparative study of BMM method in bivariate linear module using Coleman toy models.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Linear_BMM_with_step_function_for_SAMBA_models.html">Linear Bivariate BMM with SAMBA toy models : step mixing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Linear_BMM_with_cdf_function_for_SAMBA_models.html">Linear Bivariate BMM with SAMBA toy models : cdf mixing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Linear_BMM_with_switchcos_function_for_SAMBA_models.html">Linear Bivariate BMM with SAMBA toy models : switchcos mixing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Bivariate_Test.html">Bivariate BMM Test: Taweret v.0.1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/N_Model_BMM.html">Multivariate BMM for n = 3, …, N models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Trees_BMM_2D.html">BART BMM: 2D Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Trees_BMM_2D_K_models.html">BART BMM: 2D Inputs with K Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For Developers:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="how_to_add_new_mixing.html">How to add a new mixing method to Taweret</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_add_documentation.html">How to update documentation in Taweret website</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Taweret</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<dl class="simple">
+<dt>Taweret requires the following for for basic functionality.</dt><dd><ul class="simple">
+<li><p>python</p></li>
+<li><p>numpy</p></li>
+<li><p>seaborn</p></li>
+<li><p>jupyter</p></li>
+<li><p>bilby</p></li>
+<li><p>ptemcee</p></li>
+</ul>
+</dd>
+</dl>
+<p>Follow these steps to install Taweret from github.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/danOSU/Taweret.git
+<span class="c1">#If you want to use SMABA toy models please clone samba repo</span>
+<span class="c1">#git clone https://github.com/asemposki/SAMBA.git</span>
+<span class="nb">cd</span> Taweret
+conda env create -f environment.yml
+conda activate test_env
+<span class="nb">cd</span> doc/source/notebooks
+jupyter notebook --browser<span class="o">=</span>safari
+</pre></div>
+</div>
+<p>You can look at the available notebooks in the directory and modify it for your own use case. If you need to add a new mixing method please refer to the <strong>For Developers</strong> section.</p>
+<p>The pip installation is not available yet.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install Taweret
+</pre></div>
+</div>
+<section id="additional-requirements">
+<h2>Additional Requirements<a class="headerlink" href="#additional-requirements" title="Permalink to this heading"></a></h2>
+<p>Certain Taweret modules may require additional steps to properly setup an environment which can execute the code. These modules and their respective requirements are listed below.</p>
+<section id="bayesian-trees">
+<h3><strong>Bayesian Trees</strong><a class="headerlink" href="#bayesian-trees" title="Permalink to this heading"></a></h3>
+<p>The Trees module is a Python interface which calls and executes a Ubuntu package in order to fit the mixing model and obtain the resulting predictions. This package is developed as a part of the Open Bayesian Trees Project (OpenBT). See references [1] and [2] for details. To install the Ubuntu package, please follow the steps below based on the operating system of choice.</p>
+<p><strong>Linux:</strong></p>
+<ol class="arabic simple">
+<li><p>Download the OpenBT Ubuntu Linux 20.04 package:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wget -q https://github.com/jcyannotty/OpenBT/raw/main/openbt_mixing0.current_amd64-MPI_Ubuntu_20.04.deb
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Install the package and reset the library cache:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /location/of/downloaded/.deb
+$ dpkg -i openbt_mixing0.current_amd64-MPI_Ubuntu_20.04.deb
+$ ldconfig
+</pre></div>
+</div>
+<p><strong>Mac OS/:X</strong></p>
+<ol class="arabic simple">
+<li><p>Install the OS/X OpenMPI package by running the following <cite>brew</cite> commands in a terminal window:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ /bin/bash -c <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+$ brew install open-mpi
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Download the OpenBT OSX binary package:</p></li>
+<li><p>Install the OpenBT OSX package by double-clicking on the downloaded .pkg file and follow the on-screen instructions.</p></li>
+</ol>
+<p><strong>Windows:</strong></p>
+<p>OpenBT will run within the Windows 10 Windows Subsystem for Linux (WSL) environment. For instructions on installing WSL, please see (<a class="reference external" href="https://ubuntu.com/wsl">https://ubuntu.com/wsl</a>). We recommend installing the Ubuntu 20.04 WSL build. There are also instructions (<a class="reference external" href="https://wiki.ubuntu.com/WSL?action=subscribe&amp;_ga=2.237944261.411635877.1601405226-783048612.1601405226#Installing_Packages_on_Ubuntu">https://wiki.ubuntu.com/WSL?action=subscribe&amp;_ga=2.237944261.411635877.1601405226-783048612.1601405226#Installing_Packages_on_Ubuntu</a>) on keeping your Ubuntu WSL up to date, or installing additional features like X support. Once you have installed the WSL Ubuntu layer, start the WSL Ubuntu shell from the start menu and then install the package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /mnt/c/location/of/downloaded/.deb
+$ dpkg -i openbt_mixing0.current_amd64-MPI_Ubuntu_20.04.deb
+</pre></div>
+</div>
+<p><strong>OpenBT References</strong></p>
+<ol class="arabic simple">
+<li><p>OpenBT Repository (<a class="reference external" href="https://bitbucket.org/mpratola/openbt/src/master/">https://bitbucket.org/mpratola/openbt/src/master/</a>).</p></li>
+<li><p>OpenBT Repository with Model Mixing (<a class="reference external" href="https://github.com/jcyannotty/OpenBT">https://github.com/jcyannotty/OpenBT</a>).</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="Taweret for Bayesian Model Mixing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="Taweret" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Dan Liyanage, Alexandra Semposki, John Yannotty, Kevin Ingles.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
